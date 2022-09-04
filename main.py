@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import *
 from PyQt5 import QtCore, QtGui, QtWidgets
-import time,threading,os
+import time,threading,os,sqlite3,random
 import locale
 locale.setlocale(locale.LC_TIME,'')
 
@@ -44,7 +44,7 @@ class main(QMainWindow):
         
         
     def change(self,index):
-        print(self.styleSheet())
+        #print(self.styleSheet())
         #self.setStyleSheet(self.styleSheet()+"\n"+"QPushButton{border-right: 4px solid none;}")
         self.renitMenu()
         self.sender().setStyleSheet(self.sender().styleSheet()+"\n"+self.border_right)
@@ -64,10 +64,11 @@ class main(QMainWindow):
         
         #print("initial")
         self.op=""
-        if not os.path.isfile("client"):
+        """if not os.path.isfile("client"):
             with open("client","w") as f : f.write("{}")
         
         with open("client","r") as f :self.dico_client=eval(f.read())
+        """
         
         #self.annule()
         """self.ui.table_client.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
