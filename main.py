@@ -20,18 +20,19 @@ class main(QMainWindow):
         self.setWindowIcon(icon)
         self.ui.stackedWidget.setCurrentIndex(0)
         self.onlyInt = QIntValidator()
-        #self.ui.contact.setValidator(self.onlyInt)
+        self.ui.salaire.setValidator(self.onlyInt)
 
         
         #signal lors d'un clic sur un bouton
 
         self.ui.btn_home.clicked.connect(lambda: self.change(0))
         self.ui.btn_emp.clicked.connect(lambda: self.change(1))
-
         self.ui.btn_pres.clicked.connect(lambda: self.change(2))
         self.ui.btn_equip.clicked.connect(lambda: self.change(3))
         self.ui.btn_op.clicked.connect(lambda: self.change(4))
         self.ui.btn_param.clicked.connect(lambda: self.change(5))
+
+        self.ui.enreg.clicked.connect(self.enregistrement_employe)
         
         #threading.Thread(target=lambda : self.time()).start()
         
@@ -64,6 +65,13 @@ class main(QMainWindow):
         
         #print("initial")
         self.op=""
+
+        #creation de la bd et des tables si ceux ci n'existe pas
+        self.base = sqlite3.connect("stock.db")
+        self.cur = self.base.cursor()
+        self.cur.execute("""CREATE TABLE IF NOT EXISTS employes(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, nom TEXT, prenoms TEXT, specialite TEXT, salaire TEXT)""")
+        self.base.commit()
+        
         """if not os.path.isfile("client"):
             with open("client","w") as f : f.write("{}")
         
@@ -71,11 +79,49 @@ class main(QMainWindow):
         """
         
         #self.annule()
-        """self.ui.table_client.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
+        self.ui.table.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
                            "QTableCornerButton::section { background-color:#232326; }"
                            "QTableView::item{ color:white;}"
-                           "QHeaderView::section { color:white; background-color:#232326; }")"""
-    
+                           "QHeaderView::section { color:white; background-color:#232326; }")
+
+
+    def enregistrement_employe(self):
+        nom = self.ui.nom.text()
+        prenoms = self.ui.prenoms.text()
+        specialite = self.ui.specialite.text()
+     
+        salaire = self.ui.salaire.text()
+        
+        if nom=="" or prenoms=="" or specialite=="" or salaire=="" :
+            QMessageBox.warning(self,"erreur","<p style='color:black'>veillez remplir tous les champs svp</p>")
+
+        else:
+            info = {nom,prenoms,specialite,salaire}
+            self.insert_bd("employes",info)
+    def insert_bd(self,table,ligne):
+        
+        try:
+           
+            if table=="employes":
+                print("oo")
+                try:
+                    self.cur.execute("INSERT INTO employes(nom, prenoms, specialite , salaire) VALUES (?,?,?,?)",ligne)
+                    print("oo")
+                    self.base.commit()
+                except e:
+                    print(e)
+                QMessageBox.information(self,"succes","enregistrement effectuer\n")
+                
+            else:
+                
+                
+                QMessageBox.information(self,"succes","enregistrement non effectué\n")
+                
+                
+        except e:
+                print(e)
+                QMessageBox.warning(self,"erreur","une erreur est survenu ,enregistrement non effectuer\nmerci de réessayer!")
+                
     def time(self):
         self.ui.jour.setText(time.strftime("%A %d %B"))
         while 1:

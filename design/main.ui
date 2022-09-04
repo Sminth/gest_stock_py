@@ -392,7 +392,7 @@ font: 75 14pt &quot;Palatino Linotype&quot;;</string>
      <string notr="true">background:transparent</string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="label_7">
@@ -668,7 +668,7 @@ border-radius :20px</string>
      <zorder>label_16</zorder>
     </widget>
     <widget class="QWidget" name="page_2">
-     <widget class="QTableWidget" name="table_client">
+     <widget class="QTableWidget" name="table">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -701,6 +701,11 @@ border-radius :20px</string>
       <attribute name="verticalHeaderDefaultSectionSize">
        <number>40</number>
       </attribute>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
       <column>
        <property name="text">
         <string>Noms</string>
@@ -721,6 +726,26 @@ border-radius :20px</string>
         <string>Salaire</string>
        </property>
       </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>koffi</string>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>jean</string>
+       </property>
+      </item>
+      <item row="0" column="2">
+       <property name="text">
+        <string>maçon</string>
+       </property>
+      </item>
+      <item row="0" column="3">
+       <property name="text">
+        <string>50000</string>
+       </property>
+      </item>
      </widget>
      <widget class="QLabel" name="label_32">
       <property name="geometry">
@@ -763,7 +788,7 @@ color: rgb(255, 255, 255);</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="nom_2">
+     <widget class="QLineEdit" name="prenoms">
       <property name="geometry">
        <rect>
         <x>430</x>
@@ -783,7 +808,7 @@ color: rgb(255, 255, 255);</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="nom_3">
+     <widget class="QLineEdit" name="specialite">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -803,7 +828,7 @@ color: rgb(255, 255, 255);</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="valider">
+     <widget class="QPushButton" name="enreg">
       <property name="geometry">
        <rect>
         <x>870</x>
@@ -907,7 +932,7 @@ background-color:rgb(255, 85, 0);
        <string>MODIFIER</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="nom_4">
+     <widget class="QLineEdit" name="salaire">
       <property name="geometry">
        <rect>
         <x>430</x>
