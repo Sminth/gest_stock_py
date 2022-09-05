@@ -31,7 +31,7 @@ class main(QMainWindow):
         self.ui.btn_equip.clicked.connect(lambda: self.change(3))
         self.ui.btn_op.clicked.connect(lambda: self.change(4))
         self.ui.btn_param.clicked.connect(lambda: self.change(5))
-
+        
         self.ui.enreg.clicked.connect(self.enregistrement_employe)
         
         #threading.Thread(target=lambda : self.time()).start()
@@ -96,7 +96,7 @@ class main(QMainWindow):
             QMessageBox.warning(self,"erreur","<p style='color:black'>veillez remplir tous les champs svp</p>")
 
         else:
-            info = {nom,prenoms,specialite,salaire}
+            info = (nom,prenoms,specialite,salaire)
             self.insert_bd("employes",info)
     def insert_bd(self,table,ligne):
         
@@ -108,8 +108,8 @@ class main(QMainWindow):
                     self.cur.execute("INSERT INTO employes(nom, prenoms, specialite , salaire) VALUES (?,?,?,?)",ligne)
                     print("oo")
                     self.base.commit()
-                except e:
-                    print(e)
+                except :
+                    print("e")
                 QMessageBox.information(self,"succes","enregistrement effectuer\n")
                 
             else:
@@ -118,8 +118,8 @@ class main(QMainWindow):
                 QMessageBox.information(self,"succes","enregistrement non effectué\n")
                 
                 
-        except e:
-                print(e)
+        except :
+                print("e")
                 QMessageBox.warning(self,"erreur","une erreur est survenu ,enregistrement non effectuer\nmerci de réessayer!")
                 
     def time(self):
