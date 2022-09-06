@@ -51,7 +51,7 @@ class main(QMainWindow):
         self.renitMenu()
         self.sender().setStyleSheet(self.sender().styleSheet()+"\n"+self.border_right)
         self.ui.stackedWidget.setCurrentIndex(index)
-
+        if index == 3 : self.affichage_equipement()
 
     def renitMenu(self):
         self.ui.btn_home.setStyleSheet(self.ui.btn_home.styleSheet()+"\n"+"border-right:none;")
@@ -96,13 +96,8 @@ class main(QMainWindow):
             info = (libbele,unite)
             self.insert_bd("equipement",info)
 
-            self.cur.execute('SELECT libelle,unite FROM equipement')
-            result = self.cur.fetchall()
-            self.ui.table_client_3.setRowCount(0)
-            for row_number, row_data in enumerate(result):
-                self.ui.table_client_3.insertRow(row_number)
-                for column_number, data in enumerate(row_data):
-                    self.ui.table_client_3.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+            
+            self.affichage_equipement()
             
             
     def enregistrement_employe(self):
@@ -124,21 +119,18 @@ class main(QMainWindow):
            
             if table=="employes":
                 print("oo")
-                try:
-                    self.cur.execute("INSERT INTO employes(nom, prenoms, specialite , salaire) VALUES (?,?,?,?)",ligne)
-                    print("oo")
-                    self.base.commit()
-                except :
-                    print("e")
+                self.cur.execute("INSERT INTO employes(nom, prenoms, specialite , salaire) VALUES (?,?,?,?)",ligne)
+                print("oo")
+                self.base.commit()
+                
                 QMessageBox.information(self,"succes","enregistrement effectuer\n")
             elif table=="equipement":
                 print("oo")
-                try:
-                    self.cur.execute("INSERT INTO equipement(libelle,unite) VALUES (?,?)",ligne)
-                    print("oo")
-                    self.base.commit()
-                except :
-                    print("e")
+                
+                self.cur.execute("INSERT INTO equipement(libelle,unite) VALUES (?,?)",ligne)
+                print("oo")
+                self.base.commit()
+               
                 QMessageBox.information(self,"succes","enregistrement effectuer\n")
                 
             else:
@@ -151,6 +143,20 @@ class main(QMainWindow):
                 print("e")
                 QMessageBox.warning(self,"erreur","une erreur est survenu ,enregistrement non effectuer\nmerci de réessayer!")
                 
+
+    def affichage_equipement(self):
+        try:
+            self.cur.execute('SELECT libelle,unite FROM equipement')
+            result = self.cur.fetchall()
+            print(result)
+            self.ui.table_client_3.setRowCount(0)
+            for row_number, row_data in enumerate(result):
+                    self.ui.table_client_3.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.ui.table_client_3.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+        except e:
+                print(e)                                      
+        
     def time(self):
         self.ui.jour.setText(time.strftime("%A %d %B"))
         while 1:
