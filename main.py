@@ -33,6 +33,7 @@ class main(QMainWindow):
         self.ui.btn_param.clicked.connect(lambda: self.change(5))
         
         self.ui.enreg.clicked.connect(self.enregistrement_employe)
+        self.ui.valider_2.clicked.connect(self.enregistrement_equipement)
         
         #threading.Thread(target=lambda : self.time()).start()
         
@@ -70,6 +71,8 @@ class main(QMainWindow):
         self.base = sqlite3.connect("stock.db")
         self.cur = self.base.cursor()
         self.cur.execute("""CREATE TABLE IF NOT EXISTS employes(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, nom TEXT, prenoms TEXT, specialite TEXT, salaire TEXT)""")
+        self.cur.execute("""CREATE TABLE IF NOT EXISTS equipement(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, libelle TEXT, unite TEXT)""")
+        
         self.base.commit()
         
         """if not os.path.isfile("client"):
@@ -83,8 +86,25 @@ class main(QMainWindow):
                            "QTableCornerButton::section { background-color:#232326; }"
                            "QTableView::item{ color:white;}"
                            "QHeaderView::section { color:white; background-color:#232326; }")
+    def enregistrement_equipement(self):
+        libbele = self.ui.nom_5.text()
+        unite = self.ui.nom_6.text()
+        
+        if libbele =="" or unite==""  :
+            QMessageBox.warning(self,"erreur","<p style='color:black'>veillez remplir tous les champs svp</p>")
+        else:
+            info = (libbele,unite)
+            self.insert_bd("equipement",info)
 
-
+            self.cur.execute('SELECT libelle,unite FROM equipement')
+            result = self.cur.fetchall()
+            self.ui.table_client_3.setRowCount(0)
+            for row_number, row_data in enumerate(result):
+                self.ui.table_client_3.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    self.ui.table_client_3.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+            
+            
     def enregistrement_employe(self):
         nom = self.ui.nom.text()
         prenoms = self.ui.prenoms.text()
@@ -106,6 +126,15 @@ class main(QMainWindow):
                 print("oo")
                 try:
                     self.cur.execute("INSERT INTO employes(nom, prenoms, specialite , salaire) VALUES (?,?,?,?)",ligne)
+                    print("oo")
+                    self.base.commit()
+                except :
+                    print("e")
+                QMessageBox.information(self,"succes","enregistrement effectuer\n")
+            elif table=="equipement":
+                print("oo")
+                try:
+                    self.cur.execute("INSERT INTO equipement(libelle,unite) VALUES (?,?)",ligne)
                     print("oo")
                     self.base.commit()
                 except :
