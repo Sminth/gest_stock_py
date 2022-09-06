@@ -34,6 +34,7 @@ class main(QMainWindow):
         
         self.ui.enreg.clicked.connect(self.enregistrement_employe)
         self.ui.valider_2.clicked.connect(self.enregistrement_equipement)
+        self.ui.valider_14.clicked.connect(self.enregistrement_presence)
         
         
         #threading.Thread(target=lambda : self.time()).start()
@@ -52,11 +53,13 @@ class main(QMainWindow):
         self.renitMenu()
         self.sender().setStyleSheet(self.sender().styleSheet()+"\n"+self.border_right)
         self.ui.stackedWidget.setCurrentIndex(index)
+        print("o")
         if index == 3 : self.affichage_equipement()
         elif index == 1 : self.affichage_employees()
         elif index == 0 : self.acceuil()
         elif index == 2 : self.liste_employes()
         elif index == 4 : self.liste_equipement()
+
 
     def renitMenu(self):
         self.ui.btn_home.setStyleSheet(self.ui.btn_home.styleSheet()+"\n"+"border-right:none;")
@@ -85,31 +88,68 @@ class main(QMainWindow):
         
         with open("client","r") as f :self.dico_client=eval(f.read())
         """
+
+        today = QtCore.QDate.currentDate()
+        self.ui.date_2.setDate(today)
         
         #self.annule()
         self.ui.table.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
                            "QTableCornerButton::section { background-color:#232326; }"
                            "QTableView::item{ color:white;}"
                            "QHeaderView::section { color:white; background-color:#232326; }")
+
+    
+    
+
+    def enregistrement_presence(self):
+        a=self.ui.comboBox_3.currentText()
+        print(a)
+
+
+
+
+
+        
+
+
+        """try:
+    
+            self.cur.execute('SELECT  FROM employes ')
+            result = self.cur.fetchall()
+            print(result)
+            self.ui.table_client_3.setRowCount(0)
+            for row_number, row_data in enumerate(result):
+                    self.ui.table_client_3.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.ui.table_client_3.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+        except e:
+
+                print(e)"""
+
+  
     def liste_employes(self):
-        conn=sqlite3.connect('stock.db')
-        cur=conn.cursor()
-        cur.execute('SELECT MAX(id) from employes')
-        a= cur.fetchone()[0]
-        for i in range(0,a):
-            cur.execute('SELECT nom from employes')
-            b=cur.fetchall()[i]
-            self.ui.comboBox_3.addItems(b)
+        
+        cur=self.base.cursor()
+        self.ui.comboBox_3.clear()
+        cur.execute('SELECT * from employes')
+        a=cur.fetchall()
+        print(a)
+        for i in a:
+            noms = i[1]+" "+i[2]
+            self.ui.comboBox_3.addItem(noms)
 
     def liste_equipement(self):
-        conn=sqlite3.connect('stock.db')
-        cur=conn.cursor()
-        cur.execute('SELECT MAX(id) from equipement')
-        a= cur.fetchone()[0]
-        for i in range(0,a):
-            cur.execute('SELECT libelle from equipement')
-            b=cur.fetchall()[i]
-            self.ui.comboBox_2.addItems(b)
+
+        cur=self.base.cursor()
+        self.ui.comboBox_2.clear()
+        cur.execute('SELECT * from equipement')
+        a=cur.fetchall()
+        print(a)
+        for i in a:
+            equip = i[1]
+            self.ui.comboBox_2.addItem(equip)
+
+        
         
         
        
@@ -190,6 +230,7 @@ class main(QMainWindow):
                     for column_number, data in enumerate(row_data):
                         self.ui.table_client_3.setItem(row_number, column_number,QTableWidgetItem(str(data)))
         except e:
+
                 print(e)
 
     def affichage_employees(self):
@@ -208,10 +249,10 @@ class main(QMainWindow):
         try:
             conn=sqlite3.connect('stock.db')
             cur=conn.cursor()
-            cur.execute('SELECT MAX(id) from employes')
-            a= cur.fetchone()[0]
-            cur.execute('SELECT MAX(id) from equipement')
-            b=cur.fetchone()[0]
+            cur.execute('SELECT * from employes')
+            a=len( cur.fetchall())
+            cur.execute('SELECT * from equipement')
+            b=len(cur.fetchall())
             conn.commit()
             cur.close()
             conn.close()
@@ -221,10 +262,11 @@ class main(QMainWindow):
             QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")
         
 
-        
     def time(self):
-        self.ui.jour.setText(time.strftime("%A %d %B"))
+        today = QtCore.QDate.currentDate()
+        self.ui.jour.setText(today)
         while 1:
+            this_moment = QtCore.QTime.currentTime()
             self.ui.heure.setText(time.strftime("%H : %M"))
             time.sleep(1)
             if self.fin=="ok" : break

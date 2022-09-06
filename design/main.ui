@@ -392,7 +392,7 @@ font: 75 14pt &quot;Palatino Linotype&quot;;</string>
      <string notr="true">background:transparent</string>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="label_7">
@@ -1285,7 +1285,7 @@ background-color:rgb(255, 85, 0);
      <widget class="QPushButton" name="valider_8">
       <property name="geometry">
        <rect>
-        <x>860</x>
+        <x>890</x>
         <y>380</y>
         <width>181</width>
         <height>61</height>
@@ -1311,7 +1311,7 @@ background-color: rgb(163, 163, 163);
      <widget class="QLineEdit" name="nom_5">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>40</x>
         <y>130</y>
         <width>341</width>
         <height>61</height>
@@ -1331,7 +1331,7 @@ color: rgb(255, 255, 255);</string>
      <widget class="QLineEdit" name="nom_6">
       <property name="geometry">
        <rect>
-        <x>620</x>
+        <x>410</x>
         <y>130</y>
         <width>311</width>
         <height>61</height>
@@ -1353,7 +1353,7 @@ color: rgb(255, 255, 255);</string>
        <rect>
         <x>20</x>
         <y>380</y>
-        <width>781</width>
+        <width>851</width>
         <height>291</height>
        </rect>
       </property>
@@ -1370,7 +1370,7 @@ color: rgb(255, 255, 255);</string>
        <bool>true</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>330</number>
+       <number>283</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>false</bool>
@@ -1391,11 +1391,16 @@ color: rgb(255, 255, 255);</string>
         <string>Unité</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>stock</string>
+       </property>
+      </column>
      </widget>
      <widget class="QPushButton" name="valider_6">
       <property name="geometry">
        <rect>
-        <x>860</x>
+        <x>890</x>
         <y>580</y>
         <width>181</width>
         <height>61</height>
@@ -1421,7 +1426,7 @@ background-color:rgb(255, 85, 0);
      <widget class="QPushButton" name="valider_7">
       <property name="geometry">
        <rect>
-        <x>860</x>
+        <x>890</x>
         <y>480</y>
         <width>181</width>
         <height>61</height>
@@ -1463,6 +1468,26 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="nom_7">
+      <property name="geometry">
+       <rect>
+        <x>750</x>
+        <y>130</y>
+        <width>311</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 14pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Stock</string>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
