@@ -35,6 +35,7 @@ class main(QMainWindow):
         self.ui.enreg.clicked.connect(self.enregistrement_employe)
         self.ui.valider_2.clicked.connect(self.enregistrement_equipement)
         
+        
         #threading.Thread(target=lambda : self.time()).start()
         
         #affiche la date actuel dans le QDateEdit
@@ -51,7 +52,10 @@ class main(QMainWindow):
         self.renitMenu()
         self.sender().setStyleSheet(self.sender().styleSheet()+"\n"+self.border_right)
         self.ui.stackedWidget.setCurrentIndex(index)
-
+        if index == 3 : self.affichage_equipement()
+        elif index == 1 : self.affichage_employees()
+        elif index == 0 : self.acceuil()
+        elif index == 2 : self.liste_employes()
 
     def renitMenu(self):
         self.ui.btn_home.setStyleSheet(self.ui.btn_home.styleSheet()+"\n"+"border-right:none;")
@@ -86,6 +90,15 @@ class main(QMainWindow):
                            "QTableCornerButton::section { background-color:#232326; }"
                            "QTableView::item{ color:white;}"
                            "QHeaderView::section { color:white; background-color:#232326; }")
+    def liste_employes(self):
+        conn=sqlite3.connect('stock.db')
+        cur=conn.cursor()
+        cur.execute('SELECT nom from employes')
+        a=cur.fetchone()
+        self.ui.comboBox_3.addItems(a)
+        
+
+    
     def enregistrement_equipement(self):
         libbele = self.ui.nom_5.text()
         unite = self.ui.nom_6.text()
@@ -96,13 +109,8 @@ class main(QMainWindow):
             info = (libbele,unite)
             self.insert_bd("equipement",info)
 
-            self.cur.execute('SELECT libelle,unite FROM equipement')
-            result = self.cur.fetchall()
-            self.ui.table_client_3.setRowCount(0)
-            for row_number, row_data in enumerate(result):
-                self.ui.table_client_3.insertRow(row_number)
-                for column_number, data in enumerate(row_data):
-                    self.ui.table_client_3.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+            
+            self.affichage_equipement()
             
             
     def enregistrement_employe(self):
@@ -118,27 +126,26 @@ class main(QMainWindow):
         else:
             info = (nom,prenoms,specialite,salaire)
             self.insert_bd("employes",info)
+            
+            
     def insert_bd(self,table,ligne):
         
         try:
            
             if table=="employes":
                 print("oo")
-                try:
-                    self.cur.execute("INSERT INTO employes(nom, prenoms, specialite , salaire) VALUES (?,?,?,?)",ligne)
-                    print("oo")
-                    self.base.commit()
-                except :
-                    print("e")
+                self.cur.execute("INSERT INTO employes(nom, prenoms, specialite , salaire) VALUES (?,?,?,?)",ligne)
+                print("oo")
+                self.base.commit()
+                
                 QMessageBox.information(self,"succes","enregistrement effectuer\n")
             elif table=="equipement":
                 print("oo")
-                try:
-                    self.cur.execute("INSERT INTO equipement(libelle,unite) VALUES (?,?)",ligne)
-                    print("oo")
-                    self.base.commit()
-                except :
-                    print("e")
+                
+                self.cur.execute("INSERT INTO equipement(libelle,unite) VALUES (?,?)",ligne)
+                print("oo")
+                self.base.commit()
+               
                 QMessageBox.information(self,"succes","enregistrement effectuer\n")
                 
             else:
@@ -151,6 +158,50 @@ class main(QMainWindow):
                 print("e")
                 QMessageBox.warning(self,"erreur","une erreur est survenu ,enregistrement non effectuer\nmerci de réessayer!")
                 
+
+    def affichage_equipement(self):
+        try:
+            self.cur.execute('SELECT libelle,unite FROM equipement')
+            result = self.cur.fetchall()
+            print(result)
+            self.ui.table_client_3.setRowCount(0)
+            for row_number, row_data in enumerate(result):
+                    self.ui.table_client_3.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.ui.table_client_3.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+        except e:
+                print(e)
+
+    def affichage_employees(self):
+        try:
+            self.cur.execute('SELECT nom , prenoms, specialite,salaire FROM employes')
+            result = self.cur.fetchall()
+            print(result)
+            self.ui.table.setRowCount(0)
+            for row_number, row_data in enumerate(result):
+                    self.ui.table.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.ui.table.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+        except e:
+                print(e)
+    def acceuil(self):
+        try:
+            conn=sqlite3.connect('stock.db')
+            cur=conn.cursor()
+            cur.execute('SELECT MAX(id) from employes')
+            a= cur.fetchone()[0]
+            cur.execute('SELECT MAX(id) from equipement')
+            b=cur.fetchone()[0]
+            conn.commit()
+            cur.close()
+            conn.close()
+            self.ui.label_6.setText(str(a))
+            self.ui.label_11.setText(str(b))
+        except:
+            QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")
+        
+
+        
     def time(self):
         self.ui.jour.setText(time.strftime("%A %d %B"))
         while 1:
