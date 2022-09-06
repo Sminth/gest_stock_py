@@ -489,8 +489,8 @@ class Ui_MainWindow(object):
         self.comboBox_3 = QtWidgets.QComboBox(self.page_5)
         self.comboBox_3.setGeometry(QtCore.QRect(60, 210, 271, 61))
         self.comboBox_3.setStyleSheet("border : 1px solid #fff")
+        self.comboBox_3.setCurrentText("")
         self.comboBox_3.setObjectName("comboBox_3")
-        self.comboBox_3.addItem("")
         self.stackedWidget.addWidget(self.page_5)
         self.page_6 = QtWidgets.QWidget()
         self.page_6.setObjectName("page_6")
@@ -659,8 +659,8 @@ class Ui_MainWindow(object):
         self.comboBox_2 = QtWidgets.QComboBox(self.page_7)
         self.comboBox_2.setGeometry(QtCore.QRect(30, 200, 301, 61))
         self.comboBox_2.setStyleSheet("border : 1px solid #fff")
+        self.comboBox_2.setCurrentText("")
         self.comboBox_2.setObjectName("comboBox_2")
-        self.comboBox_2.addItem("")
         self.spinBox = QtWidgets.QSpinBox(self.page_7)
         self.spinBox.setGeometry(QtCore.QRect(470, 210, 191, 51))
         self.spinBox.setStyleSheet("background : transparent;\n"
@@ -698,7 +698,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(5)
+        self.stackedWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -762,8 +762,6 @@ class Ui_MainWindow(object):
         self.comboBox_4.setItemText(5, _translate("MainWindow", "Samedi"))
         self.label_36.setText(_translate("MainWindow", "Semaine du :"))
         self.valider_16.setText(_translate("MainWindow", "SUPPRIMER"))
-        self.comboBox_3.setCurrentText(_translate("MainWindow", "Nom"))
-        self.comboBox_3.setItemText(0, _translate("MainWindow", "Nom"))
         self.valider_2.setText(_translate("MainWindow", "ENREGISTRER"))
         self.valider_8.setText(_translate("MainWindow", "ANNULER"))
         self.nom_5.setPlaceholderText(_translate("MainWindow", "Libelle"))
@@ -796,8 +794,6 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(0, _translate("MainWindow", "Type Operation"))
         self.comboBox.setItemText(1, _translate("MainWindow", "entrée"))
         self.comboBox.setItemText(2, _translate("MainWindow", "Sortie"))
-        self.comboBox_2.setCurrentText(_translate("MainWindow", "materiel"))
-        self.comboBox_2.setItemText(0, _translate("MainWindow", "materiel"))
         self.label_37.setText(_translate("MainWindow", "PARAMETRE"))
 import resources_rc
 

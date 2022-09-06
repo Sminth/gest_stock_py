@@ -56,6 +56,7 @@ class main(QMainWindow):
         elif index == 1 : self.affichage_employees()
         elif index == 0 : self.acceuil()
         elif index == 2 : self.liste_employes()
+        elif index == 4 : self.liste_equipement()
 
     def renitMenu(self):
         self.ui.btn_home.setStyleSheet(self.ui.btn_home.styleSheet()+"\n"+"border-right:none;")
@@ -93,9 +94,28 @@ class main(QMainWindow):
     def liste_employes(self):
         conn=sqlite3.connect('stock.db')
         cur=conn.cursor()
-        cur.execute('SELECT nom from employes')
-        a=cur.fetchone()
-        self.ui.comboBox_3.addItems(a)
+        cur.execute('SELECT MAX(id) from employes')
+        a= cur.fetchone()[0]
+        for i in range(0,a):
+            cur.execute('SELECT nom from employes')
+            b=cur.fetchall()[i]
+            self.ui.comboBox_3.addItems(b)
+
+    def liste_equipement(self):
+        conn=sqlite3.connect('stock.db')
+        cur=conn.cursor()
+        cur.execute('SELECT MAX(id) from equipement')
+        a= cur.fetchone()[0]
+        for i in range(0,a):
+            cur.execute('SELECT libelle from equipement')
+            b=cur.fetchall()[i]
+            self.ui.comboBox_2.addItems(b)
+        
+        
+       
+        
+        
+        
         
 
     
