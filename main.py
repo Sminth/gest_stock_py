@@ -173,9 +173,6 @@ class main(QMainWindow):
             equip = i[1]
             self.ui.comboBox_2.addItem(equip)
 
-        
-
-
     
     def enregistrement_equipement(self):
         libbele = self.ui.nom_5.text()
