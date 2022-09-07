@@ -103,7 +103,7 @@ class main(QMainWindow):
         self.base = sqlite3.connect("stock.db")
         self.cur = self.base.cursor()
         self.cur.execute("""CREATE TABLE IF NOT EXISTS employes(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, nom TEXT, prenoms TEXT, specialite TEXT, salaire TEXT)""")
-        self.cur.execute("""CREATE TABLE IF NOT EXISTS equipement(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, libelle TEXT, unite TEXT)""")
+        self.cur.execute("""CREATE TABLE IF NOT EXISTS equipement(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, libelle TEXT, unite TEXT, stock TEXT)""")
         
         self.base.commit()
         
