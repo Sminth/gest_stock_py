@@ -21,6 +21,7 @@ class main(QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.onlyInt = QIntValidator()
         self.ui.salaire.setValidator(self.onlyInt)
+        self.ui.stock.setValidator(self.onlyInt)
 
 
         self.id_employe=0
@@ -37,12 +38,29 @@ class main(QMainWindow):
         self.ui.enreg.clicked.connect(self.enregistrement_employe)
         self.ui.valider_2.clicked.connect(self.enregistrement_equipement)
         self.ui.valider_14.clicked.connect(self.enregistrement_presence)
+        self.ui.valider_12.clicked.connect(self.operation)
 
         self.ui.annuler.clicked.connect(self.renit)
         self.ui.suprimer.clicked.connect(lambda: self.supprimer("employes",self.id_employe))
         self.ui.modifier.clicked.connect(lambda: self.modifier("employes",self.id_employe))
 
         self.ui.table.clicked.connect(lambda : self.on_click("employe"))
+
+        self.ui.table_client_3.clicked.connect(lambda : self.on_click("equipement"))
+        self.ui.valider_6.clicked.connect(lambda: self.supprimer("equipement",self.id_equipement))
+        self.ui.valider_7.clicked.connect(lambda: self.modifier("equipement",self.id_equipement))
+        self.ui.valider_8.clicked.connect(self.renit)
+
+        
+        self.ui.supprimer4.clicked.connect(lambda: self.supprimer("operation",self.id_equipement))
+        self.ui.modifier4.clicked.connect(lambda: self.modifier("operation",self.id_equipement))
+        self.ui.table_client_4.clicked.connect(lambda : self.on_click("operation"))
+        self.ui.annuler4.clicked.connect(self.renit)
+
+       
+                
+
+        
         #threading.Thread(target=lambda : self.time()).start()
         
         #affiche la date actuel dans le QDateEdit
@@ -53,6 +71,60 @@ class main(QMainWindow):
        
         self.border_right = "border-right: 2px solid rgb(255, 121, 198);"
         self.renit()
+
+    def operation(self):
+        materiel= self.ui.comboBox_2.currentText()
+        type_operation = self.ui.comboBox.currentText()
+        
+        quantite = self.ui.spinBox.value()                
+        date = self.ui.date_2.date() 
+        date_py = date.toPyDate()
+        date_string = date_py.strftime("%d/%m/%Y")
+        cur=self.base.cursor()
+    
+        self.cur.execute("SELECT stock FROM equipement WHERE libelle = ?",(materiel,))
+        stock_avant = self.cur.fetchone()
+        self.base.commit()
+        stock_initial = int(stock_avant[0])
+        if (type_operation == "entrée"):
+            stock_après = stock_initial+quantite
+        elif (type_operation == "Sortie"):
+            stock_après = stock_initial-quantite
+            
+        #try:
+            
+        data=(date_string,materiel,quantite,type_operation,stock_initial,stock_après)
+        self.cur.execute("INSERT INTO operation( date , materiel , quantite , type_ope , stock_avant , stock_après )VALUES(?,?,?,?,?,?)",data)
+            
+        
+        self.affichage_operation()
+        new=(stock_après,materiel)
+        self.cur.execute("UPDATE equipement SET stock = ? WHERE libelle = ? ",new)
+        self.base.commit()
+        """except:
+        QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")"""
+
+    def affichage_operation(self):
+        try:
+            self.cur.execute('SELECT * FROM operation')
+            result = self.cur.fetchall()
+            print(result)
+            self.ui.table_client_4.setRowCount(0)
+            for row_number, row_data in enumerate(result):
+                    self.ui.table_client_4.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.ui.table_client_4.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+        except e:
+                print(e)
+
+    
+            
+            
+        
+            
+            
+        
+                
         
     def change(self,index):
         #print(self.styleSheet())
@@ -66,6 +138,7 @@ class main(QMainWindow):
         elif index == 0 : self.acceuil()
         elif index == 2 : self.liste_employes()
         elif index == 4 : self.liste_equipement()
+        
 
 
     def renit(self):
@@ -84,6 +157,33 @@ class main(QMainWindow):
         self.ui.prenoms.setText("")
         self.ui.specialite.setText("")
         self.ui.salaire.setText("")
+
+        self.ui.valider_6.setEnabled(False)
+        self.ui.valider_6.setStyleSheet(font)
+        self.ui.valider_8.setEnabled(False)
+        self.ui.valider_8.setStyleSheet(font)
+        self.ui.valider_7.setEnabled(False)
+        self.ui.valider_7.setStyleSheet(font)
+        self.ui.libelle.setText("")
+        self.ui.unite.setText("")
+        self.ui.stock.setText("")
+
+        self.ui.annuler4.setEnabled(False)
+        self.ui.annuler4.setStyleSheet(font)
+        self.ui.supprimer4.setEnabled(False)
+        self.ui.supprimer4.setStyleSheet(font)
+        self.ui.modifier4.setEnabled(False)
+        self.ui.modifier4.setStyleSheet(font)
+
+        self.ui.valider_13.setEnabled(False)
+        self.ui.valider_13.setStyleSheet(font)
+        self.ui.valider_16.setEnabled(False)
+        self.ui.valider_16.setStyleSheet(font)
+        self.ui.valider_15.setEnabled(False)
+        self.ui.valider_15.setStyleSheet(font)
+        
+        
+        
         self.modif=False
     def renitMenu(self):
         self.ui.btn_home.setStyleSheet(self.ui.btn_home.styleSheet()+"\n"+"border-right:none;")
@@ -104,18 +204,19 @@ class main(QMainWindow):
         self.cur = self.base.cursor()
         self.cur.execute("""CREATE TABLE IF NOT EXISTS employes(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, nom TEXT, prenoms TEXT, specialite TEXT, salaire TEXT)""")
         self.cur.execute("""CREATE TABLE IF NOT EXISTS equipement(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, libelle TEXT, unite TEXT, stock TEXT)""")
-        
+        self.cur.execute("""CREATE TABLE IF NOT EXISTS operation(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, date TEXT, materiel TEXT, quantite TEXT, type_ope TEXT, stock_avant TEXT, stock_après TEXT)""")
         self.base.commit()
         
-        """if not os.path.isfile("client"):
+        if not os.path.isfile("client"):
             with open("client","w") as f : f.write("{}")
         
         with open("client","r") as f :self.dico_client=eval(f.read())
-        """
+        
 
         today = QtCore.QDate.currentDate()
         self.ui.date_2.setDate(today)
         self.acceuil()
+        self.affichage_operation()
         #self.annule()
         self.ui.table.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
                            "QTableCornerButton::section { background-color:#232326; }"
@@ -125,30 +226,7 @@ class main(QMainWindow):
     
     
 
-    def enregistrement_presence(self):
-        a=self.ui.comboBox_3.currentText()
-        print(a)
-
-
-
-
-
-        
-
-
-        """try:
     
-            self.cur.execute('SELECT  FROM employes ')
-            result = self.cur.fetchall()
-            print(result)
-            self.ui.table_client_3.setRowCount(0)
-            for row_number, row_data in enumerate(result):
-                    self.ui.table_client_3.insertRow(row_number)
-                    for column_number, data in enumerate(row_data):
-                        self.ui.table_client_3.setItem(row_number, column_number,QTableWidgetItem(str(data)))
-        except e:
-
-                print(e)"""
 
   
     def liste_employes(self):
@@ -175,17 +253,44 @@ class main(QMainWindow):
 
     
     def enregistrement_equipement(self):
-        libbele = self.ui.nom_5.text()
-        unite = self.ui.nom_6.text()
+        libbele = self.ui.libelle.text()
+        unite = self.ui.unite.text()
+        stock=self.ui.stock.text()
         
-        if libbele =="" or unite==""  :
+        if libbele =="" or unite=="" or stock== "" :
             QMessageBox.warning(self,"erreur","<p style='color:black'>veillez remplir tous les champs svp</p>")
-        else:
-            info = (libbele,unite)
+            return
+        if self.modif != True :
+            info = (libbele,unite,stock)
             self.insert_bd("equipement",info)
-
-            
             self.affichage_equipement()
+        else :
+            info = (libbele,unite,stock,self.id_equipement)
+            self.modif_bd("equipement",info)
+            self.affichage_equipement()
+            self.renit()
+        self.renit()
+
+    def enregistrement_presence(self):
+        date= self.ui.date_3.currentText()
+        noms= self.ui.comboBox_3.currentText()
+        jours= self.ui.comboBox_4.currentText()
+        pres=self.ui.comboBox_5.currentText()
+        if self.modif != True :
+            
+                info = (date,noms,jours,pres)
+                self.insert_bd("presence",info)
+                self.affichage_presence()
+                
+        else:
+                info = (date,noms,jours,pres)
+                self.modif_bd("presence",info)
+                self.affichage_presence()
+                self.renit()
+        self.renit()
+        
+        
+            
             
             
     def enregistrement_employe(self):
@@ -225,11 +330,16 @@ class main(QMainWindow):
             elif table=="equipement":
                 print("oo")
                 
-                self.cur.execute("INSERT INTO equipement(libelle,unite) VALUES (?,?)",ligne)
+                self.cur.execute("INSERT INTO equipement(libelle,unite,stock) VALUES (?,?,?)",ligne)
                 print("oo")
                 self.base.commit()
                
                 QMessageBox.information(self,"succes","enregistrement effectuer\n")
+            elif table=="presence":
+                print("oo")
+                self.cur.execute("INSERT INTO presence(id ,semaine , nom , jour, presences) VALUES (?,?,?,?)",ligne)
+                print("oo")
+                self.base.commit()
                 
             else:
                 
@@ -253,6 +363,19 @@ class main(QMainWindow):
                 self.base.commit()
                 
                 QMessageBox.information(self,"succes","enregistrement effectuer\n")
+            elif table=="equipement":
+                print("oo")
+                self.cur.execute("UPDATE equipement SET libelle=?, unite=?, stock=? WHERE id=?",ligne)
+                print("oo")
+                self.base.commit()
+                
+                QMessageBox.information(self,"succes","enregistrement effectuer\n")
+            elif table=="operation":
+                print("oo")
+                self.cur.execute("UPDATE operation SET date=?, materiel=?, quantite=?,type_ope  WHERE id=?",ligne)
+                print("oo")
+                self.base.commit()
+                QMessageBox.information(self,"succes","enregistrement effectuer\n")
             
                 
             else:
@@ -265,10 +388,23 @@ class main(QMainWindow):
                 print("e")
                 QMessageBox.warning(self,"erreur","une erreur est survenu ,enregistrement non effectuer\nmerci de réessayer!")
                 
-
+    def affichage_presence(self):
+        try:
+            date= self.ui.date_3.currentText()
+            self.cur.execute('SELECT * FROM presence WHERE semaine = ?',date)
+            result = self.cur.fetchall()
+            print(result)
+            self.ui.table_client_5.setRowCount(0)
+            for row_number, row_data in enumerate(result):
+                    self.ui.table_client_5.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.ui.table_client_5.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+        except e:
+            print(e)
+            
     def affichage_equipement(self):
         try:
-            self.cur.execute('SELECT libelle,unite FROM equipement')
+            self.cur.execute('SELECT * FROM equipement')
             result = self.cur.fetchall()
             print(result)
             self.ui.table_client_3.setRowCount(0)
@@ -317,6 +453,16 @@ class main(QMainWindow):
         if p=="employe":
             self.row = self.ui.table.currentRow()
             self.id_employe=self.ui.table.item(self.row, 0).text()
+        elif p=="equipement":
+            self.row = self.ui.table_client_3.currentRow()
+            self.id_equipement=self.ui.table_client_3.item(self.row, 0).text()
+        elif p=="operation":
+            self.row = self.ui.table_client_4.currentRow()
+            self.id_equipement=self.ui.table_client_4.item(self.row, 0).text()
+        elif p=="presence":
+            self.row = self.ui.table_client_5.currentRow()
+            self.id_presence=self.ui.table_client_5.item(self.row, 0).text()
+            
 
         self.ui.modifier.setEnabled(True)
         self.ui.modifier.setStyleSheet(font)
@@ -324,20 +470,51 @@ class main(QMainWindow):
         self.ui.annuler.setStyleSheet(font)
         self.ui.suprimer.setEnabled(True)
         self.ui.suprimer.setStyleSheet(font)
+
+        self.ui.valider_7.setEnabled(True)
+        self.ui.valider_7.setStyleSheet(font)
+        self.ui.valider_8.setEnabled(True)
+        self.ui.valider_8.setStyleSheet(font)
+        self.ui.valider_6.setEnabled(True)
+        self.ui.valider_6.setStyleSheet(font)
+
+        self.ui.annuler4.setEnabled(True)
+        self.ui.annuler4.setStyleSheet(font)
+        self.ui.supprimer4.setEnabled(True)
+        self.ui.supprimer4.setStyleSheet(font)
+        self.ui.modifier4.setEnabled(True)
+        self.ui.modifier4.setStyleSheet(font)
+
+        self.ui.valider_13.setEnabled(True)
+        self.ui.valider_13.setStyleSheet(font)
+        self.ui.valider_16.setEnabled(True)
+        self.ui.valider_16.setStyleSheet(font)
+        self.ui.valider_15.setEnabled(True)
+        self.ui.valider_15.setStyleSheet(font)
         
-    def supprimer(self,table, id):
+        
+    def supprimer(self,table,id):
         try:
            
             cur=self.base.cursor()
-            cur.execute('DELETE from '+table+' WHERE id=?',id)
+            cur.execute('DELETE from '+table+' WHERE id=?',(id,))
             self.base.commit()
             self.renit()
             if table=="employes":
                 self.affichage_employees()
+            elif table == "equipement":
+                self.affichage_equipement()
+            elif table == "operation":
+                self.affichage_operation()
+                
+                
         except:
             QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")
 
     def modifier(self,table, id):
+        
+        
+        
         try:
             self.modif = True
             if table=="employes":
@@ -348,7 +525,33 @@ class main(QMainWindow):
                 self.ui.prenoms.setText(result[2])
                 self.ui.specialite.setText(result[3])
                 self.ui.salaire.setText(result[4])
-                #self.affichage_employees()
+            elif table=="equipement":
+                self.cur.execute('SELECT * FROM equipement WHERE id=?',id)
+                result = self.cur.fetchone()
+                print(result)
+                self.ui.libelle.setText(result[1])
+                self.ui.unite.setText(result[2])
+                self.ui.stock.setText(result[3])
+            elif table == "operation":
+            
+                self.cur.execute('SELECT * FROM operation WHERE id=?',(id,))
+                result = self.cur.fetchone()
+                print(result)
+
+            """elif table=="presence":
+                self.cur.execute('SELECT * FROM presence WHERE id=?',id)
+                result = self.cur.fetchone()
+                print(result)
+                self.ui.nom.setText(result[1])
+                self.ui.prenoms.setText(result[2])
+                self.ui.specialite.setText(result[3])
+                self.ui.salaire.setText(result[4])
+                #self.ui.comboBox_2.setCurrentText(result[2])
+                #self.ui.spinBox.setValue(result[3])
+                #self.ui.comboBox.setCurrentText(result[3])
+                
+                
+                #self.affichage_employees()"""
         except:
             QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")
     def time(self):

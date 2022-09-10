@@ -392,7 +392,7 @@ font: 75 14pt &quot;Palatino Linotype&quot;;</string>
      <string notr="true">background:transparent</string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="label_7">
@@ -1112,7 +1112,7 @@ text-align: left;
        <bool>true</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>129</number>
+       <number>114</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>false</bool>
@@ -1123,6 +1123,11 @@ text-align: left;
       <attribute name="verticalHeaderDefaultSectionSize">
        <number>40</number>
       </attribute>
+      <column>
+       <property name="text">
+        <string>#id</string>
+       </property>
+      </column>
       <column>
        <property name="text">
         <string>Nom</string>
@@ -1315,7 +1320,7 @@ background-color: rgb(163, 163, 163);
        <string>ANNULER</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="nom_5">
+     <widget class="QLineEdit" name="libelle">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -1335,7 +1340,7 @@ color: rgb(255, 255, 255);</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="nom_6">
+     <widget class="QLineEdit" name="unite">
       <property name="geometry">
        <rect>
         <x>410</x>
@@ -1377,7 +1382,7 @@ color: rgb(255, 255, 255);</string>
        <bool>true</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>283</number>
+       <number>212</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>false</bool>
@@ -1388,6 +1393,11 @@ color: rgb(255, 255, 255);</string>
       <attribute name="verticalHeaderDefaultSectionSize">
        <number>40</number>
       </attribute>
+      <column>
+       <property name="text">
+        <string>#id</string>
+       </property>
+      </column>
       <column>
        <property name="text">
         <string>Libellé</string>
@@ -1477,7 +1487,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="nom_7">
+     <widget class="QLineEdit" name="stock">
       <property name="geometry">
        <rect>
         <x>750</x>
@@ -1521,7 +1531,7 @@ color: rgb(255, 255, 255);</string>
        <bool>true</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>150</number>
+       <number>130</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>false</bool>
@@ -1534,6 +1544,11 @@ color: rgb(255, 255, 255);</string>
       </attribute>
       <column>
        <property name="text">
+        <string>#id</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Date</string>
        </property>
       </column>
@@ -1544,12 +1559,12 @@ color: rgb(255, 255, 255);</string>
       </column>
       <column>
        <property name="text">
-        <string>Type Operation</string>
+        <string>Quantité</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Quantité</string>
+        <string>Type Operation</string>
        </property>
       </column>
       <column>
@@ -1563,7 +1578,7 @@ color: rgb(255, 255, 255);</string>
        </property>
       </column>
      </widget>
-     <widget class="QPushButton" name="valider_9">
+     <widget class="QPushButton" name="supprimer4">
       <property name="geometry">
        <rect>
         <x>940</x>
@@ -1590,7 +1605,7 @@ text-align: left;
        <string>SUPPRIMER</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="valider_10">
+     <widget class="QPushButton" name="modifier4">
       <property name="geometry">
        <rect>
         <x>940</x>
@@ -1639,7 +1654,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="valider_11">
+     <widget class="QPushButton" name="annuler4">
       <property name="geometry">
        <rect>
         <x>940</x>
