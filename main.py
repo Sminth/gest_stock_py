@@ -73,36 +73,42 @@ class main(QMainWindow):
         self.renit()
 
     def operation(self):
-        materiel= self.ui.comboBox_2.currentText()
-        type_operation = self.ui.comboBox.currentText()
+        try:
+            materiel= self.ui.comboBox_2.currentText()
+            type_operation = self.ui.comboBox.currentText()
+            
+            quantite = self.ui.spinBox.value()                
+            date = self.ui.date_2.date() 
+            date_py = date.toPyDate()
+            date_string = date_py.strftime("%d/%m/%Y")
+            cur=self.base.cursor()
         
-        quantite = self.ui.spinBox.value()                
-        date = self.ui.date_2.date() 
-        date_py = date.toPyDate()
-        date_string = date_py.strftime("%d/%m/%Y")
-        cur=self.base.cursor()
-    
-        self.cur.execute("SELECT stock FROM equipement WHERE libelle = ?",(materiel,))
-        stock_avant = self.cur.fetchone()
-        self.base.commit()
-        stock_initial = int(stock_avant[0])
-        if (type_operation == "entrée"):
-            stock_après = stock_initial+quantite
-        elif (type_operation == "Sortie"):
-            stock_après = stock_initial-quantite
+            self.cur.execute("SELECT stock FROM equipement WHERE libelle = ?",(materiel,))
+            stock_avant = self.cur.fetchone()
+            self.base.commit()
+            stock_initial = int(stock_avant[0])
+            if (type_operation == "entrée"):
+                stock_après = stock_initial+quantite
+            elif (type_operation == "Sortie"):
+                stock_après = stock_initial-quantite
+                
+            #try:
+                
+            data=(date_string,materiel,quantite,type_operation,stock_initial,stock_après)
+            self.cur.execute("INSERT INTO operation( date , materiel , quantite , type_ope , stock_avant , stock_après )VALUES(?,?,?,?,?,?)",data)
+                
             
-        #try:
-            
-        data=(date_string,materiel,quantite,type_operation,stock_initial,stock_après)
-        self.cur.execute("INSERT INTO operation( date , materiel , quantite , type_ope , stock_avant , stock_après )VALUES(?,?,?,?,?,?)",data)
-            
-        
-        self.affichage_operation()
-        new=(stock_après,materiel)
-        self.cur.execute("UPDATE equipement SET stock = ? WHERE libelle = ? ",new)
-        self.base.commit()
-        """except:
-        QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")"""
+            self.affichage_operation()
+            new=(stock_après,materiel)
+            self.cur.execute("UPDATE equipement SET stock = ? WHERE libelle = ? ",new)
+            self.base.commit()
+            """except:
+            QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")"""
+        except:
+            msg = QMessageBox()
+            msg.setWindowTitle("info")
+            msg.setText("erreur, veuillez vérifier les champs")
+            x = msg.exec_()
 
     def affichage_operation(self):
         try:
@@ -258,7 +264,10 @@ class main(QMainWindow):
         stock=self.ui.stock.text()
         
         if libbele =="" or unite=="" or stock== "" :
-            QMessageBox.warning(self,"erreur","<p style='color:black'>veillez remplir tous les champs svp</p>")
+            msg = QMessageBox()
+            msg.setWindowTitle("info")
+            msg.setText("veuillez remplir tous les champs")
+            x = msg.exec_()
             return
         if self.modif != True :
             info = (libbele,unite,stock)
@@ -299,7 +308,10 @@ class main(QMainWindow):
         specialite = self.ui.specialite.text()
         salaire = self.ui.salaire.text()
         if nom=="" or prenoms=="" or specialite=="" or salaire=="" :
-            QMessageBox.warning(self,"erreur","<p style='color:black'>veillez remplir tous les champs svp</p>")
+            msg = QMessageBox()
+            msg.setWindowTitle("info")
+            msg.setText("veuillez remplir tous les champs")
+            x = msg.exec_()
             return
         
         if self.modif != True :
@@ -326,7 +338,10 @@ class main(QMainWindow):
                 print("oo")
                 self.base.commit()
                 
-                QMessageBox.information(self,"succes","enregistrement effectuer\n")
+                msg = QMessageBox()
+                msg.setWindowTitle("info")
+                msg.setText("succes")
+                x = msg.exec_()
             elif table=="equipement":
                 print("oo")
                 
@@ -334,7 +349,10 @@ class main(QMainWindow):
                 print("oo")
                 self.base.commit()
                
-                QMessageBox.information(self,"succes","enregistrement effectuer\n")
+                msg = QMessageBox()
+                msg.setWindowTitle("info")
+                msg.setText("succes")
+                x = msg.exec_()
             elif table=="presence":
                 print("oo")
                 self.cur.execute("INSERT INTO presence(id ,semaine , nom , jour, presences) VALUES (?,?,?,?)",ligne)
@@ -349,7 +367,10 @@ class main(QMainWindow):
                 
         except :
                 print("e")
-                QMessageBox.warning(self,"erreur","une erreur est survenu ,enregistrement non effectuer\nmerci de réessayer!")
+                msg = QMessageBox()
+                msg.setWindowTitle("info")
+                msg.setText("erreur, veuillez réssayer")
+                x = msg.exec_()
                 
 
     def modif_bd(self,table,ligne):
@@ -362,20 +383,29 @@ class main(QMainWindow):
                 print("oo")
                 self.base.commit()
                 
-                QMessageBox.information(self,"succes","enregistrement effectuer\n")
+                msg = QMessageBox()
+                msg.setWindowTitle("info")
+                msg.setText("succes")
+                x = msg.exec_()
             elif table=="equipement":
                 print("oo")
                 self.cur.execute("UPDATE equipement SET libelle=?, unite=?, stock=? WHERE id=?",ligne)
                 print("oo")
                 self.base.commit()
                 
-                QMessageBox.information(self,"succes","enregistrement effectuer\n")
+                msg = QMessageBox()
+                msg.setWindowTitle("info")
+                msg.setText("succes")
+                x = msg.exec_()
             elif table=="operation":
                 print("oo")
                 self.cur.execute("UPDATE operation SET date=?, materiel=?, quantite=?,type_ope  WHERE id=?",ligne)
                 print("oo")
                 self.base.commit()
-                QMessageBox.information(self,"succes","enregistrement effectuer\n")
+                msg = QMessageBox()
+                msg.setWindowTitle("info")
+                msg.setText("succes")
+                x = msg.exec_()
             
                 
             else:
@@ -386,7 +416,10 @@ class main(QMainWindow):
                 
         except :
                 print("e")
-                QMessageBox.warning(self,"erreur","une erreur est survenu ,enregistrement non effectuer\nmerci de réessayer!")
+                msg = QMessageBox()
+                msg.setWindowTitle("info")
+                msg.setText("veuillez réssayer")
+                x = msg.exec_()
                 
     def affichage_presence(self):
         try:
@@ -442,7 +475,12 @@ class main(QMainWindow):
             self.ui.label_6.setText(str(a))
             self.ui.label_11.setText(str(b))
         except:
-            QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")
+            
+            msg = QMessageBox()
+            msg.setWindowTitle("info")
+            msg.setText("succes")
+            x = msg.exec_()
+            
         
 
     def on_click(self,p):
@@ -509,7 +547,10 @@ class main(QMainWindow):
                 
                 
         except:
-            QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")
+            msg = QMessageBox()
+            msg.setWindowTitle("info")
+            msg.setText("erreur")
+            x = msg.exec_()
 
     def modifier(self,table, id):
         
@@ -553,7 +594,11 @@ class main(QMainWindow):
                 
                 #self.affichage_employees()"""
         except:
-            QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")
+            
+            msg = QMessageBox()
+            msg.setWindowTitle("info")
+            msg.setText("succes")
+            x = msg.exec_()
     def time(self):
         today = QtCore.QDate.currentDate()
         self.ui.jour.setText(today)
