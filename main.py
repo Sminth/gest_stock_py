@@ -1,4 +1,5 @@
 #importation des modules
+import unicodedata
 from design.main_ui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -6,7 +7,8 @@ from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 import time,threading,os,sqlite3,random
-import locale
+import locale,xlwt
+import win32com.client as win32
 locale.setlocale(locale.LC_TIME,'')
 
 class main(QMainWindow):
@@ -58,7 +60,7 @@ class main(QMainWindow):
         self.ui.annuler4.clicked.connect(self.renit)
 
        
-                
+        self.ui.exporter.clicked.connect(self.exportEmployeToExcel)
 
         
         #threading.Thread(target=lambda : self.time()).start()
@@ -112,7 +114,7 @@ class main(QMainWindow):
 
     def affichage_operation(self):
         try:
-            self.cur.execute('SELECT * FROM operation')
+            self.cur.execute('SELECT date , materiel , quantite , type_ope , stock_avant , stock_après FROM operation')
             result = self.cur.fetchall()
             print(result)
             self.ui.table_client_4.setRowCount(0)
@@ -128,10 +130,25 @@ class main(QMainWindow):
             
         
             
-            
-        
+
+    def exportEmployeToExcel(self):
+        filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save File', '', ".xls(*.xls)") 
+        print(filename[0])
+        wbk = xlwt.Workbook()
+        sheet = wbk.add_sheet("sheet", cell_overwrite_ok=True)
+        self.add2(sheet)
+        wbk.save(filename[0])
+
+    def add2(self, sheet):
+        for j in range(self.ui.table.model().columnCount()) :
+            sheet.write(0,j,self.ui.table.horizontalHeaderItem(j).text())
+        for currentColumn in range(self.ui.table.columnCount()):
+            for currentRow in range(self.ui.table.rowCount()):
+                teext = str(self.ui.table.item(currentRow, currentColumn).text())
+                sheet.write(currentRow+1, currentColumn, teext)
                 
-        
+    
+
     def change(self,index):
         #print(self.styleSheet())
         #self.setStyleSheet(self.styleSheet()+"\n"+"QPushButton{border-right: 4px solid none;}")
@@ -188,9 +205,8 @@ class main(QMainWindow):
         self.ui.valider_15.setEnabled(False)
         self.ui.valider_15.setStyleSheet(font)
         
-        
-        
         self.modif=False
+
     def renitMenu(self):
         self.ui.btn_home.setStyleSheet(self.ui.btn_home.styleSheet()+"\n"+"border-right:none;")
         self.ui.btn_emp.setStyleSheet(self.ui.btn_emp.styleSheet()+"\n"+"border-right:  none;")
@@ -204,7 +220,6 @@ class main(QMainWindow):
         
         #print("initial")
         self.op=""
-
         #creation de la bd et des tables si ceux ci n'existe pas
         self.base = sqlite3.connect("stock.db")
         self.cur = self.base.cursor()
@@ -225,6 +240,18 @@ class main(QMainWindow):
         self.affichage_operation()
         #self.annule()
         self.ui.table.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
+                           "QTableCornerButton::section { background-color:#232326; }"
+                           "QTableView::item{ color:white;}"
+                           "QHeaderView::section { color:white; background-color:#232326; }")
+        self.ui.table_client_3.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
+                           "QTableCornerButton::section { background-color:#232326; }"
+                           "QTableView::item{ color:white;}"
+                           "QHeaderView::section { color:white; background-color:#232326; }")
+        self.ui.table_client_4.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
+                           "QTableCornerButton::section { background-color:#232326; }"
+                           "QTableView::item{ color:white;}"
+                           "QHeaderView::section { color:white; background-color:#232326; }")
+        self.ui.table_client_5.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
                            "QTableCornerButton::section { background-color:#232326; }"
                            "QTableView::item{ color:white;}"
                            "QHeaderView::section { color:white; background-color:#232326; }")
