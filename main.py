@@ -130,7 +130,7 @@ class main(QMainWindow):
             
         
             
-
+    ## ses deux fonctions permettent d'exporter les tableview dans des fichiers excels
     def exportEmployeToExcel(self):
         filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save File', '', ".xls(*.xls)") 
         print(filename[0])
