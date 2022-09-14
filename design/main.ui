@@ -392,7 +392,7 @@ font: 75 14pt &quot;Palatino Linotype&quot;;</string>
      <string notr="true">background:transparent</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="label_7">
