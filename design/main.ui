@@ -389,10 +389,14 @@ font: 75 14pt &quot;Palatino Linotype&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background:transparent</string>
+     <string notr="true">background:transparent;
+
+
+
+</string>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="label_7">
@@ -1906,7 +1910,7 @@ border:none;
      <widget class="QLabel" name="label_37">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>410</x>
         <y>40</y>
         <width>171</width>
         <height>41</height>
@@ -1914,6 +1918,7 @@ border:none;
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
+background:none;
 
 font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
@@ -1935,7 +1940,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
-
+background:none;
 font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="text">
@@ -1948,7 +1953,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
      <widget class="QLabel" name="label_45">
       <property name="geometry">
        <rect>
-        <x>160</x>
+        <x>140</x>
         <y>310</y>
         <width>331</width>
         <height>41</height>
@@ -1956,7 +1961,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
-
+background:none;
 font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="text">
@@ -1969,7 +1974,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
      <widget class="QLabel" name="label_46">
       <property name="geometry">
        <rect>
-        <x>160</x>
+        <x>140</x>
         <y>410</y>
         <width>331</width>
         <height>41</height>
@@ -1977,7 +1982,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
-
+background:none;
 font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="text">
@@ -1998,7 +2003,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
-
+background:none;
 font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="text">
@@ -2019,7 +2024,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
-
+background:none;
 font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="text">
@@ -2027,6 +2032,25 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>250</y>
+        <width>281</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background:none;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="resources.qrc">:/images/images/images/LogoSansBackgr.png</pixmap>
       </property>
      </widget>
     </widget>
@@ -2038,7 +2062,7 @@ font: 75 16pt &quot;Palatino Linotype&quot;;</string>
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>35</height>
+     <height>29</height>
     </rect>
    </property>
   </widget>

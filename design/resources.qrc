@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="images">
+    <file>images/images/LogoSansBackgr.png</file>
+    <file>images/images/logo.jpeg</file>
     <file>images/images/PyDracula.png</file>
     <file>images/images/PyDracula_vertical.png</file>
   </qresource>

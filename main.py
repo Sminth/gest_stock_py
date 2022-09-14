@@ -9,6 +9,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import time,threading,os,sqlite3,random
 import locale,xlwt
 import win32com.client as win32
+
 locale.setlocale(locale.LC_TIME,'')
 
 class main(QMainWindow):
@@ -24,6 +25,9 @@ class main(QMainWindow):
         self.onlyInt = QIntValidator()
         self.ui.salaire.setValidator(self.onlyInt)
         self.ui.stock.setValidator(self.onlyInt)
+
+
+        
 
 
         self.id_employe=0
@@ -61,6 +65,10 @@ class main(QMainWindow):
 
        
         self.ui.exporter.clicked.connect(self.exportEmployeToExcel)
+        self.ui.exporter2.clicked.connect(self.exportEquipementToExcel)
+        self.ui.exporter3.clicked.connect(self.exportexportationToExcel)
+        self.ui.exporter1.clicked.connect(self.exportpresenceToExcel)
+        
 
         
         #threading.Thread(target=lambda : self.time()).start()
@@ -146,6 +154,64 @@ class main(QMainWindow):
             for currentRow in range(self.ui.table.rowCount()):
                 teext = str(self.ui.table.item(currentRow, currentColumn).text())
                 sheet.write(currentRow+1, currentColumn, teext)
+
+    #exportation pour equipement
+
+
+    def exportEquipementToExcel(self):
+        filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save File', '', ".xls(*.xls)") 
+        print(filename[0])
+        wbk = xlwt.Workbook()
+        sheet = wbk.add_sheet("sheet", cell_overwrite_ok=True)
+        self.add3(sheet)
+        wbk.save(filename[0])
+
+    def add3(self, sheet):
+        for j in range(self.ui.table_client_3.model().columnCount()) :
+            sheet.write(0,j,self.ui.table_client_3.horizontalHeaderItem(j).text())
+        for currentColumn in range(self.ui.table_client_3.columnCount()):
+            for currentRow in range(self.ui.table_client_3.rowCount()):
+                teext = str(self.ui.table_client_3.item(currentRow, currentColumn).text())
+                sheet.write(currentRow+1, currentColumn, teext)
+
+    #export exportation
+
+    def exportexportationToExcel(self):
+        filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save File', '', ".xls(*.xls)") 
+        print(filename[0])
+        wbk = xlwt.Workbook()
+        sheet = wbk.add_sheet("sheet", cell_overwrite_ok=True)
+        self.add4(sheet)
+        wbk.save(filename[0])
+
+    def add4(self, sheet):
+        for j in range(self.ui.table_client_4.model().columnCount()) :
+            sheet.write(0,j,self.ui.table_client_4.horizontalHeaderItem(j).text())
+        for currentColumn in range(self.ui.table_client_4.columnCount()):
+            for currentRow in range(self.ui.table_client_4.rowCount()):
+                teext = str(self.ui.table_client_4.item(currentRow, currentColumn).text())
+                sheet.write(currentRow+1, currentColumn, teext)
+
+    #export presence
+    def exportpresenceToExcel(self):
+        filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save File', '', ".xls(*.xls)") 
+        print(filename[0])
+        wbk = xlwt.Workbook()
+        sheet = wbk.add_sheet("sheet", cell_overwrite_ok=True)
+        self.add5(sheet)
+        wbk.save(filename[0])
+
+    def add5(self, sheet):
+        for j in range(self.ui.table_client_5.model().columnCount()) :
+            sheet.write(0,j,self.ui.table_client_5.horizontalHeaderItem(j).text())
+        for currentColumn in range(self.ui.table_client_5.columnCount()):
+            for currentRow in range(self.ui.table_client_5.rowCount()):
+                teext = str(self.ui.table_client_5.item(currentRow, currentColumn).text())
+                sheet.write(currentRow+1, currentColumn, teext)
+        
+
+
+    
                 
     
 
@@ -238,6 +304,7 @@ class main(QMainWindow):
         self.ui.date_2.setDate(today)
         self.acceuil()
         self.affichage_operation()
+        
         #self.annule()
         self.ui.table.setStyleSheet("QTableView::item:selected { color:white; background:#000000; font-weight:900;}"
                            "QTableCornerButton::section { background-color:#232326; }"

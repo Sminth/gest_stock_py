@@ -184,7 +184,11 @@ class Ui_MainWindow(object):
         self.line.setObjectName("line")
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
         self.stackedWidget.setGeometry(QtCore.QRect(190, 1, 1091, 681))
-        self.stackedWidget.setStyleSheet("background:transparent")
+        self.stackedWidget.setStyleSheet("background:transparent;\n"
+"\n"
+"\n"
+"\n"
+"")
         self.stackedWidget.setObjectName("stackedWidget")
         self.page = QtWidgets.QWidget()
         self.page.setObjectName("page")
@@ -743,8 +747,9 @@ class Ui_MainWindow(object):
         self.page_8 = QtWidgets.QWidget()
         self.page_8.setObjectName("page_8")
         self.label_37 = QtWidgets.QLabel(self.page_8)
-        self.label_37.setGeometry(QtCore.QRect(420, 40, 171, 41))
+        self.label_37.setGeometry(QtCore.QRect(410, 40, 171, 41))
         self.label_37.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background:none;\n"
 "\n"
 "font: 75 16pt \"Palatino Linotype\";")
         self.label_37.setAlignment(QtCore.Qt.AlignCenter)
@@ -752,42 +757,48 @@ class Ui_MainWindow(object):
         self.label_44 = QtWidgets.QLabel(self.page_8)
         self.label_44.setGeometry(QtCore.QRect(120, 210, 361, 41))
         self.label_44.setStyleSheet("color: rgb(255, 255, 255);\n"
-"\n"
+"background:none;\n"
 "font: 75 16pt \"Palatino Linotype\";")
         self.label_44.setAlignment(QtCore.Qt.AlignCenter)
         self.label_44.setObjectName("label_44")
         self.label_45 = QtWidgets.QLabel(self.page_8)
-        self.label_45.setGeometry(QtCore.QRect(160, 310, 331, 41))
+        self.label_45.setGeometry(QtCore.QRect(140, 310, 331, 41))
         self.label_45.setStyleSheet("color: rgb(255, 255, 255);\n"
-"\n"
+"background:none;\n"
 "font: 75 16pt \"Palatino Linotype\";")
         self.label_45.setAlignment(QtCore.Qt.AlignCenter)
         self.label_45.setObjectName("label_45")
         self.label_46 = QtWidgets.QLabel(self.page_8)
-        self.label_46.setGeometry(QtCore.QRect(160, 410, 331, 41))
+        self.label_46.setGeometry(QtCore.QRect(140, 410, 331, 41))
         self.label_46.setStyleSheet("color: rgb(255, 255, 255);\n"
-"\n"
+"background:none;\n"
 "font: 75 16pt \"Palatino Linotype\";")
         self.label_46.setAlignment(QtCore.Qt.AlignCenter)
         self.label_46.setObjectName("label_46")
         self.label_47 = QtWidgets.QLabel(self.page_8)
         self.label_47.setGeometry(QtCore.QRect(560, 310, 331, 41))
         self.label_47.setStyleSheet("color: rgb(255, 255, 255);\n"
-"\n"
+"background:none;\n"
 "font: 75 16pt \"Palatino Linotype\";")
         self.label_47.setAlignment(QtCore.Qt.AlignCenter)
         self.label_47.setObjectName("label_47")
         self.label_48 = QtWidgets.QLabel(self.page_8)
         self.label_48.setGeometry(QtCore.QRect(390, 610, 331, 41))
         self.label_48.setStyleSheet("color: rgb(255, 255, 255);\n"
-"\n"
+"background:none;\n"
 "font: 75 16pt \"Palatino Linotype\";")
         self.label_48.setAlignment(QtCore.Qt.AlignCenter)
         self.label_48.setObjectName("label_48")
+        self.label_18 = QtWidgets.QLabel(self.page_8)
+        self.label_18.setGeometry(QtCore.QRect(430, 180, 301, 311))
+        self.label_18.setStyleSheet("background:none;")
+        self.label_18.setText("")
+        self.label_18.setPixmap(QtGui.QPixmap(":/images/images/images/LogoSansBackgr.png"))
+        self.label_18.setObjectName("label_18")
         self.stackedWidget.addWidget(self.page_8)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1280, 35))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1280, 29))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -795,7 +806,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(5)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
