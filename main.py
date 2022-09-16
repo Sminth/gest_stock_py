@@ -58,8 +58,8 @@ class main(QMainWindow):
         self.ui.valider_8.clicked.connect(self.renit)
 
         
-        self.ui.supprimer4.clicked.connect(lambda: self.supprimer("operation",self.id_equipement))
-        self.ui.modifier4.clicked.connect(lambda: self.modifier("operation",self.id_equipement))
+        self.ui.supprimer4.clicked.connect(lambda: self.supprimer("operation",self.id_operation))
+        self.ui.modifier4.clicked.connect(lambda: self.modifier("operation",self.id_operation))
         self.ui.table_client_4.clicked.connect(lambda : self.on_click("operation"))
         self.ui.annuler4.clicked.connect(self.renit)
 
@@ -563,9 +563,21 @@ class main(QMainWindow):
             a=len( cur.fetchall())
             cur.execute('SELECT * from equipement')
             b=len(cur.fetchall())
+
+            data = ("entrée")
+            cur.execute('SELECT materiel FROM operation where type_ope = ?',[data] )
+            
+            c=len(cur.fetchall())
+
+            dato = ("Sortie")
+            cur.execute('SELECT materiel FROM operation where type_ope = ?',[dato] )
+            d=len(cur.fetchall())
+                
+
             self.base.commit()
             cur.close()
-            
+            self.ui.label_13.setText(str(c))
+            self.ui.label_15.setText(str(d))
             self.ui.label_6.setText(str(a))
             self.ui.label_11.setText(str(b))
         except:
@@ -590,7 +602,7 @@ class main(QMainWindow):
             self.id_equipement=self.ui.table_client_3.item(self.row, 0).text()
         elif p=="operation":
             self.row = self.ui.table_client_4.currentRow()
-            self.id_equipement=self.ui.table_client_4.item(self.row, 0).text()
+            self.id_operation=self.ui.table_client_4.item(self.row, 0).text()
         elif p=="presence":
             self.row = self.ui.table_client_5.currentRow()
             self.id_presence=self.ui.table_client_5.item(self.row, 0).text()
