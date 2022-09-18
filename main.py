@@ -15,12 +15,16 @@ locale.setlocale(locale.LC_TIME,'')
 class main(QMainWindow):
     "classe principale"
     def __init__(self):
+        
         super(main, self).__init__()
+        
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("itachi-alt.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
+        title = "Gestionnaire btp"
+        self.setWindowTitle(title)
         self.ui.stackedWidget.setCurrentIndex(0)
         self.onlyInt = QIntValidator()
         self.ui.salaire.setValidator(self.onlyInt)
@@ -36,7 +40,7 @@ class main(QMainWindow):
 
         self.ui.btn_home.clicked.connect(lambda: self.change(0))
         self.ui.btn_emp.clicked.connect(lambda: self.change(1))
-        self.ui.btn_pres.clicked.connect(lambda: self.change(2))
+        #self.ui.btn_pres.clicked.connect(lambda: self.change(2))
         self.ui.btn_equip.clicked.connect(lambda: self.change(3))
         self.ui.btn_op.clicked.connect(lambda: self.change(4))
         self.ui.btn_param.clicked.connect(lambda: self.change(5))
@@ -84,36 +88,47 @@ class main(QMainWindow):
 
     def operation(self):
         try:
-            materiel= self.ui.comboBox_2.currentText()
-            type_operation = self.ui.comboBox.currentText()
+            if self.modif != True :
+                materiel= self.ui.comboBox_2.currentText()
+                type_operation = self.ui.comboBox.currentText()
+                
+                quantite = self.ui.spinBox.value()                
+                date = self.ui.date_2.date() 
+                date_py = date.toPyDate()
+                date_string = date_py.strftime("%d/%m/%Y")
+                cur=self.base.cursor()
             
-            quantite = self.ui.spinBox.value()                
-            date = self.ui.date_2.date() 
-            date_py = date.toPyDate()
-            date_string = date_py.strftime("%d/%m/%Y")
-            cur=self.base.cursor()
-        
-            self.cur.execute("SELECT stock FROM equipement WHERE libelle = ?",(materiel,))
-            stock_avant = self.cur.fetchone()
-            self.base.commit()
-            stock_initial = int(stock_avant[0])
-            if (type_operation == "entrée"):
-                stock_après = stock_initial+quantite
-            elif (type_operation == "Sortie"):
-                stock_après = stock_initial-quantite
+                self.cur.execute("SELECT stock FROM equipement WHERE libelle = ?",(materiel,))
+                stock_avant = self.cur.fetchone()
+                self.base.commit()
+                stock_initial = int(stock_avant[0])
+                if (type_operation == "entrée"):
+                    stock_après = stock_initial+quantite
+                elif (type_operation == "Sortie"):
+                    stock_après = stock_initial-quantite
+                    
+                #try:
+                    
+                data=(date_string,materiel,quantite,type_operation,stock_initial,stock_après)
+                self.cur.execute("INSERT INTO operation( date , materiel , quantite , type_ope , stock_avant , stock_après )VALUES(?,?,?,?,?,?)",data)
+                    
                 
-            #try:
-                
-            data=(date_string,materiel,quantite,type_operation,stock_initial,stock_après)
-            self.cur.execute("INSERT INTO operation( date , materiel , quantite , type_ope , stock_avant , stock_après )VALUES(?,?,?,?,?,?)",data)
-                
-            
-            self.affichage_operation()
-            new=(stock_après,materiel)
-            self.cur.execute("UPDATE equipement SET stock = ? WHERE libelle = ? ",new)
-            self.base.commit()
-            """except:
-            QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")"""
+                self.affichage_operation()
+                new=(stock_après,materiel)
+                self.cur.execute("UPDATE equipement SET stock = ? WHERE libelle = ? ",new)
+                self.base.commit()
+                """except:
+                QMessageBox.warning(self,"erreur","<p style='color:black'>erreur</p>")"""
+            else :
+                date = self.ui.date_2.date()
+                materiel= self.ui.comboBox_2.currentText()
+                quantite = self.ui.spinBox.value()
+                type_operation = self.ui.comboBox.currentText()
+                info = (date,materiel,quantite,type_operation)
+                self.modif_bd("operation",info)
+                self.affichage_operation()
+                self.renit()
+            self.renit()
         except:
             msg = QMessageBox()
             msg.setWindowTitle("info")
@@ -122,7 +137,7 @@ class main(QMainWindow):
 
     def affichage_operation(self):
         try:
-            self.cur.execute('SELECT date , materiel , quantite , type_ope , stock_avant , stock_après FROM operation')
+            self.cur.execute('SELECT * FROM operation')
             result = self.cur.fetchall()
             print(result)
             self.ui.table_client_4.setRowCount(0)
@@ -277,7 +292,7 @@ class main(QMainWindow):
         self.ui.btn_home.setStyleSheet(self.ui.btn_home.styleSheet()+"\n"+"border-right:none;")
         self.ui.btn_emp.setStyleSheet(self.ui.btn_emp.styleSheet()+"\n"+"border-right:  none;")
 
-        self.ui.btn_pres.setStyleSheet(self.ui.btn_pres.styleSheet()+"\n"+"border-right:  none;")
+        #self.ui.btn_pres.setStyleSheet(self.ui.btn_pres.styleSheet()+"\n"+"border-right:  none;")
         self.ui.btn_equip.setStyleSheet(self.ui.btn_equip.styleSheet()+"\n"+"border-right:  none;")
         self.ui.btn_op.setStyleSheet(self.ui.btn_op.styleSheet()+"\n"+"border-right:  none;")
         self.ui.btn_param.setStyleSheet(self.ui.btn_param.styleSheet()+"\n"+"border-right:  none;")
@@ -292,6 +307,8 @@ class main(QMainWindow):
         self.cur.execute("""CREATE TABLE IF NOT EXISTS employes(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, nom TEXT, prenoms TEXT, specialite TEXT, salaire TEXT)""")
         self.cur.execute("""CREATE TABLE IF NOT EXISTS equipement(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, libelle TEXT, unite TEXT, stock TEXT)""")
         self.cur.execute("""CREATE TABLE IF NOT EXISTS operation(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, date TEXT, materiel TEXT, quantite TEXT, type_ope TEXT, stock_avant TEXT, stock_après TEXT)""")
+        self.cur.execute("""CREATE TABLE IF NOT EXISTS presence(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,nom TEXT, date TEXT, lun TEXT, mar TEXT, mer TEXT, jeu TEXT, ven TEXT, sam TEXT)""")
+
         self.base.commit()
         
         if not os.path.isfile("client"):
@@ -375,21 +392,35 @@ class main(QMainWindow):
         self.renit()
 
     def enregistrement_presence(self):
-        date= self.ui.date_3.currentText()
-        noms= self.ui.comboBox_3.currentText()
-        jours= self.ui.comboBox_4.currentText()
-        pres=self.ui.comboBox_5.currentText()
+        
         if self.modif != True :
             
-                info = (date,noms,jours,pres)
-                self.insert_bd("presence",info)
-                self.affichage_presence()
+
+            date= self.ui.date_3.currentText()
+            noms= self.ui.comboBox_3.currentText()
+            sampre = "null"
+            marpre = "null"
+            merpre = "null"
+            jeupre = "null"
+            venpre = "null"
+            
+            if self.ui.checkBox.isChecked():
+                lunpre = "present"
+            elif self.ui.checkBox_2.isChecked():
+                lunpre = "absent"
+            elif self.ui.checkBox_3.isChecked():
+                lunpre = "null"
+            
+            info = (noms,date,lunpre,mar,mer,jeu,ven,sam)
+            self.insert_bd("presence",info)
+            self.affichage_presence()
                 
         else:
-                info = (date,noms,jours,pres)
-                self.modif_bd("presence",info)
-                self.affichage_presence()
-                self.renit()
+            
+            info = (date,noms,jours,pres)
+            self.modif_bd("presence",info)
+            self.affichage_presence()
+            self.renit()
         self.renit()
         
         
@@ -449,7 +480,7 @@ class main(QMainWindow):
                 x = msg.exec_()
             elif table=="presence":
                 print("oo")
-                self.cur.execute("INSERT INTO presence(id ,semaine , nom , jour, presences) VALUES (?,?,?,?)",ligne)
+                self.cur.execute("INSERT INTO presence( nom , date, lun,mar,mer,jeu,ven,sam) VALUES (?,?,?,?,?,?,?,?)",ligne)
                 print("oo")
                 self.base.commit()
                 
@@ -493,7 +524,7 @@ class main(QMainWindow):
                 x = msg.exec_()
             elif table=="operation":
                 print("oo")
-                self.cur.execute("UPDATE operation SET date=?, materiel=?, quantite=?,type_ope  WHERE id=?",ligne)
+                self.cur.execute("UPDATE operation SET date=?, materiel=?, quantite=?,type_ope=?  WHERE id=?",ligne)
                 print("oo")
                 self.base.commit()
                 msg = QMessageBox()
